@@ -282,27 +282,141 @@ ans4 = jaccard("E=M*C^2","e=m*c^2")
 # print(ans4)
 
 # 6번 문제
-# 일단 네모네모 찾기. 한바퀴 스캔. - 한 줄 내에서 같은 글자 연속 나오는 것 확인. 위 아래 줄과 비교.
+# 일단 네모네모(한 행 내에서는 그냥 2개 이상 이어지면 되고 위아래로 맞아야함.) 찾기. 한바퀴 스캔. - 한 줄 내에서 같은 글자 연속 나오는 것 확인. 위 아래 줄과 비교.
 # 네모네모 영역 " "으로 대체
 # " " 부분은 윗윗줄에서 가져오기. 가져가진 부분은 ""으로 바꾸기
 # 반복
 # 없으면 그대로 종료.
 
-def kakaofriends(firstlist):
-    humpty=[]
-    for fl in firstlist:
-        dumpty = ""
-        for i in range(len(fl)-1):
-            if fl[i] == fl[i+1]:
-                print(fl)
-                print(fl[i])
-                print(firstlist.index(fl),i,"번째")
-                a = "*"+fl[i]
-                dumpty+=a
+def firstfriends(list):
+    location=[] # 좌표값 담아줌
+    for i in range(len(list)-1):
+        for j in range(len(list[0])-2):
+            if list[i][j] == list[i][j+1] and list[i+1][j] == list[i+1][j+1] and list[i][j] == list[i+1][j] and list[i][j] != " ":
+                if [i,j] not in location:
+                    location.append([i,j])
+                if [i,j+1] not in location:
+                    location.append([i,j+1])
+                if [i+1,j] not in location:
+                    location.append([i+1,j])
+                if [i+1,j+1] not in location:
+                    location.append([i+1,j+1])
+
+    location = sorted(location)
+    if location==[]:
+        return [[], list]
+
+    rownum = location[0][0]
+    cnt=0
+    changelist=[]
+    for loca in location:
+        if loca[0] == rownum:
+            cnt+=1
+        else:
+            index = list[loca[0]][loca[1]:cnt] # loca[0]번째에 있는 원소의 loca[1]번째부터
+            if index not in changelist:
+                changelist.append([loca[0]-cnt+1,index])
+            rownum=loca[0]
+            cnt=1
+
+    newlist=[]
+    cnt=0
+    for fl in list:
+        for ch in changelist:
+            if ch[1] in fl:
+                if cnt >=2:#list.index(fl)
+                    #index = list.index(fl)
+                    origin = list[cnt - 2]
+                    print(origin)
+                    nl = fl.replace(ch[1], origin[ch[0]:len(ch[1])])
+                    origin = origin.replace(origin[ch[0]:len(ch[1])], " "*len(ch[1]))
+                    print("++++++++++++++++",list,fl,newlist,origin,cnt,cnt-2)
+                    newlist[cnt - 2] = origin
+                    newlist.append(nl)
+                else:
+                    fl = fl.replace(ch[1], " "*len(ch))
+                    newlist.append(fl)
             else:
-                dumpty+=fl[i]
+                newlist.append(fl)
+            print(newlist)
+            input("*")
+        cnt+=1
+    return [changelist,newlist]
+
+def kakaofriends(firstlist):
+    lists = firstfriends(firstlist)
+
+    firstlist = lists[1]
+
+    while lists[0] != []:
+        lists = firstfriends(firstlist)
+        firstlist = lists[1]
+
+    cnt=0
+    for i in firstlist:
+        cnt+=i.count(" ")
+
+    return cnt
+
+def friends(lists):
+    newlist = []
+    for li in lists:
+        empty=[]
+        for i in range(len(li)):
+            empty.append(li[i])
+        newlist.append(empty)
+
+    location = []
+    for i in range(len(lists)-1):
+        for j in range(len(lists[i])-1):
+            if lists[i][j] == lists[i][j+1]:
+                if lists[i][j] != "*" and lists[i][j] == lists[i+1][j] and lists[i][j] == lists[i+1][j+1]:
+                    if [i,j] not in location:
+                        location.append([i,j])
+                    if [i,j+1] not in location:
+                        location.append([i,j+1])
+                    if [i+1,j] not in location:
+                        location.append([i+1,j])
+                    if [i+1,j+1] not in location:
+                        location.append([i+1,j+1])
+    # print("location:",location)
+
+    for loca in location:
+        target = newlist[loca[0]][loca[1]]
+        newlist[loca[0]][loca[1]] = target.replace(target,"*")
+    # print("newlist:", newlist)
+
+    for loca in location:
+        for i in range(loca[0]):
+            target = newlist[i][loca[1]] # *로 바뀐 것보다 한 줄 위에 있는 알파벳
+            current = newlist[loca[0]][loca[1]] # *로 바뀐 현재
+            newlist[loca[0]][loca[1]] = current.replace(current,target)
+            newlist[i][loca[1]] = target.replace(target, current)
+    # print("newlist2:", newlist)
+
+    cnt=0
+    for nl in newlist:
+        for n in nl:
+            if n=="*":
+                cnt+=1
+    return [newlist, cnt]
+
+def repeatFriends(newlist):
+    result = friends(newlist)
+
+    while True:
+        cnt1 = result[1]
+        result = friends(result[0])
+        cnt2 = result[1]
+        if cnt1 == cnt2:
+            break
+    return result[1]
 
 
-firstlist=["CCBDE", "AAADE", "AAABF", "CCBBF"]
-kakaofriends(firstlist)
-firstlist=["TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"]
+list1=["CCBDE", "AAADE", "AAABF", "CCBBF"]
+result1 = repeatFriends(list1)
+list2=["TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"]
+result2 = repeatFriends(list2)
+
+print(result1)
+print(result2)
