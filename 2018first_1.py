@@ -417,6 +417,69 @@ list1=["CCBDE", "AAADE", "AAABF", "CCBBF"]
 result1 = repeatFriends(list1)
 list2=["TTTANT", "RRFACC", "RRRFCC", "TRRRAA", "TTMMMF", "TMMTTJ"]
 result2 = repeatFriends(list2)
+# print(result1)
+# print(result2)
 
-print(result1)
-print(result2)
+# 7번
+import re
+from datetime import datetime, timedelta
+def solutions(inputval):
+    rex = re.compile("[^ ]+")
+    rex2 = re.compile("[^ \:\-]+")
+    print(inputval)
+
+    timedata = []
+    for iv in inputval:
+        datas = rex2.findall(iv)
+        year = int(datas[0])
+        month = int(datas[1])
+        day = int(datas[2])
+        hour = int(datas[3])
+        minute = int(datas[4])
+        sec = int(float(datas[5]))
+        sec2 = int(round(float(datas[6][:-1])))
+        starttime = datetime(year,month,day,hour,minute,sec)-timedelta(seconds=sec2)-timedelta(seconds=1)
+        endtime = datetime(year,month,day,hour,minute,sec)
+        timedata.append([starttime,endtime])
+        # while starttime != endtime:
+        #     starttime=starttime+timedelta(seconds=1)
+        #     if starttime not in servertime:
+        #         servertime.append(starttime)
+
+    startT = timedata[0][0]
+    stopT = timedata[-1][-1]
+
+    # 서버 돌아간 전체 시간을 초단위로 계산
+    cnt = 0
+    cntserver = []
+    while startT < stopT:
+        for td in timedata:
+            if startT <= td[0] < startT+timedelta(seconds=1):
+                cnt += 1
+                print('1. ',td, startT + timedelta(seconds=1), cnt)
+            elif startT < td[1] <= startT+timedelta(seconds=1):
+                cnt += 1
+                print('2. ',td, startT + timedelta(seconds=1), cnt)
+            elif td[0] < startT and td[1] > startT+timedelta(seconds=1):
+                cnt += 1
+                print('3. ',td, startT+timedelta(seconds=1), cnt)
+            else:
+                print('4. ', td, startT + timedelta(seconds=1), cnt)
+        cntserver.append(cnt)
+        startT += timedelta(seconds=1)
+        cnt = 0
+
+    cntserver = sorted(cntserver)
+    return cntserver[-1]
+
+
+
+inputval1 = ["2016-09-15 01:00:04.001 2.0s", "2016-09-15 01:00:07.000 2s"]
+inputval2 = ["2016-09-15 01:00:04.002 2.0s", "2016-09-15 01:00:07.000 2s"]
+inputval3 = ["2016-09-15 20:59:57.421 0.351s", "2016-09-15 20:59:58.233 1.181s", "2016-09-15 20:59:58.299 0.8s", "2016-09-15 20:59:58.688 1.041s", "2016-09-15 20:59:59.591 1.412s", "2016-09-15 21:00:00.464 1.466s", "2016-09-15 21:00:00.741 1.581s", "2016-09-15 21:00:00.748 2.31s", "2016-09-15 21:00:00.966 0.381s", "2016-09-15 21:00:02.066 2.62s"]
+count1 = solutions(inputval1)
+count2 = solutions(inputval2)
+count3 = solutions(inputval3)
+print(count1)
+print(count2)
+print(count3)
