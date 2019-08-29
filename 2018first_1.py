@@ -1,4 +1,9 @@
+## 문제 링크
+## https://tech.kakao.com/2017/09/27/kakao-blind-recruitment-round-1/
+
+################################
 # 1번 문제_1
+################################
 def map(arr1,arr2):
     aa=[]
 
@@ -21,7 +26,9 @@ answer1_2 = map(arr3,arr4)
 # print(answer1_1)
 # print(answer1_2)
 
+################################
 # 2번 문제.
+################################
 import re
 
 def dartResult(result):
@@ -81,7 +88,9 @@ score7 = dartResult("1D2S3T*")
 # score = dartResult("1D2S3T*#") # *,# 둘 다 있는 경우
 # print(score)
 
+################################
 # 3번 문제
+################################
 def calc_cache(cacheSize,cities):
     cache = []
     cha = 0
@@ -129,7 +138,9 @@ cha6= calc_cache(cacheSize6,cities6)
 # print(cha5)
 # print(cha6)
 
+################################
 # 4번 문제
+################################
 # 운행 간격 가지고 범위를 나누어야 함.
 # 탑승 가능 시간의 범위에 포함되는 인원이 초과되면 그 사람을 다음 회차로 밀어내기
 # 마지막에 한 명 더 탑승할 수 있으면 도착시간을 마지막 차량 출발 시간으로
@@ -198,7 +209,9 @@ t7 = boardingTime(2,1,2,timetable)
 # print(t6)
 # print(t7)
 
+################################
 # 5번 문제
+################################
 import re
 
 def makelist(str1):
@@ -281,7 +294,9 @@ ans4 = jaccard("E=M*C^2","e=m*c^2")
 # print(ans3)
 # print(ans4)
 
+################################
 # 6번 문제
+################################
 # 일단 네모네모(한 행 내에서는 그냥 2개 이상 이어지면 되고 위아래로 맞아야함.) 찾기. 한바퀴 스캔. - 한 줄 내에서 같은 글자 연속 나오는 것 확인. 위 아래 줄과 비교.
 # 네모네모 영역 " "으로 대체
 # " " 부분은 윗윗줄에서 가져오기. 가져가진 부분은 ""으로 바꾸기
@@ -420,7 +435,9 @@ result2 = repeatFriends(list2)
 # print(result1)
 # print(result2)
 
-# 7번
+################################
+# 7번(미완)
+################################
 import re
 from datetime import datetime, timedelta
 def solutions(inputval):
